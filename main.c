@@ -1,210 +1,138 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+#include "pila.h"
 ///Ejercicio 1
-int numRandom();
+void calcularTotal(float precioUnitario, int cantidad, float* total);
 ///Ejercicio 2
-void mostrarMayorMenor(int a, int b, int c);
+void aplicarDescuento(float* precio, float porcentaje);
 ///Ejercicio 3
-int sumarN(int n);
+void calcularPromedio(Pila p, float* promedio);
 ///Ejercicio 4
-void mostrarTabla(int N);
+float cargarVenta(int* cantidad, float* precio);
 ///Ejercicio 5
-float suma(float a, float b);
-float resta(float a, float b);
-float multiplicacion(float a, float b);
-float division(float a, float b);
-///Ejercicio 6
-void cambiarANegativo(int* num);
-///Ejercicio 7
-void cargarPorReferencia(int* a, int* b);
+void intercambiarValores(int* a, int* b, int* c, int* d, int* e);
 int main()
 {
     ///Ejercicio 1
-    srand(time(NULL));
-    printf("Valor random: %d\n", numRandom());
+    float precioUnitario, total;
+    int cantidad;
+
+    printf("Ingrese el precio unitario: ");
+    scanf("%f", &precioUnitario);
+
+    printf("Ingrese la cantidad de productos: ");
+    scanf("%d", &cantidad);
+
+    calcularTotal(precioUnitario, cantidad, &total);
+
+    printf("Total: %.2f\n", total);
 
 
     ///Ejercicio 2
-    mostrarMayorMenor(18, 5, 23);
+    float porcentaje, precio;
 
-    ///Ejercicio 3;
-    int N;
+    printf("Ingrese el precio: ");
+    scanf("%f", &precio);
 
-    printf("Ingrese el número para sumar: ");
-    scanf("%d", &N);
+    printf("Ingrese el descuento a aplicar: ");
+    scanf("%f", &porcentaje);
 
+    aplicarDescuento(&precio, porcentaje);
 
-    printf("Resultado: %d\n", sumarN(N));
+    printf("Precio con descuento: %.2f\n", precio);
 
+    ///Ejercicio 3
+    float promedio;
+    Pila ventas;
+    inicpila(&ventas);
+    apilar(&ventas, 10);
+    apilar(&ventas, 20);
+    apilar(&ventas, 30);
+    apilar(&ventas, 40);
+    apilar(&ventas, 50);
+
+    calcularPromedio(ventas, &promedio);
+
+    printf("Promedio de ventas: %.2f\n", promedio);
 
     ///Ejercicio 4
-    int numTabla;
-    printf("Ingrese el numero para mostrar su tabla: ");
-    scanf("%d", &numTabla);
-
-    mostrarTabla(numTabla);
+    float totalVenta;
+    totalVenta = cargarVenta(&cantidad, &precio);
+    printf("Cantidad: %d\n", cantidad);
+    printf("Precio: %.2f\n", precio);
+    printf("Total: %.2f\n", totalVenta);
 
 
     ///Ejercicio 5
-    float num1, num2;
-    int opcion;
+    int a = 10, b = 20, c = 30, d = 40, e = 50;
 
-    printf("Ingrese dos números: ");
-    scanf("%f %f", &num1, &num2);
-    printf("\n===CALCULAODRA===\n");
-    printf("1. Suma\n");
-    printf("2. Resta\n");
-    printf("3. Multiplicacion\n");
-    printf("4. Division\n");
-    printf("Elija una opción: ");
-    scanf("%d", &opcion);
+    printf("Antes: a = %d b= %d c = %d d = %d e = %d\n", a, b, c, d, e);
 
-    switch(opcion)
-    {
-    case 1:
-        printf("Resultado: %.2f\n", suma(num1, num2));
-        break;
+    intercambiarValores(&a, &b, &c, &d, &e);
 
-    case 2:
-        printf("Resultado: %.2f\n", resta(num1, num2));
-        break;
-
-    case 3:
-        printf("Resultado: %.2f\n", multiplicacion(num1, num2));
-        break;
-
-    case 4:
-        printf("Resultado: %.2f\n", division(num1, num2));
-        break;
-
-    default:
-        printf("Opción inválida\n");
-        break;
-    }
-
-    ///Ejercicio 6
-    int valor;
-    printf("Ingrese el número a cambiarle el signo: ");
-    scanf("%d", &valor);
-
-    printf("Antes: %d\n", valor);
-
-    cambiarANegativo(&valor);
-
-    printf("Después: %d\n", valor);
-
-    ///Ejercicio 7
-    int numero1, numero2;
-
-    cargarPorReferencia(&numero1, &numero2);
-
-    printf("\nNum 1: %d\n", numero1);
-    printf("\nNum 2: %d\n", numero2);
+    printf("Después: a = %d b= %d c = %d d = %d e = %d\n", a, b, c, d, e);
     return 0;
 }
 
 
 ///Ejercicio 1
-int numRandom()
+void calcularTotal(float precioUnitario, int cantidad, float* total)
 {
-    return rand() % 101;
+    *total = precioUnitario * cantidad;
 }
 
 
 ///Ejercicio 2
-void mostrarMayorMenor(int a, int b, int c)
+void aplicarDescuento(float* precio, float porcentaje)
 {
-    int menor = a;
-    int mayor = a;
-
-    if(b > mayor)
-    {
-        mayor = b;
-    }
-
-    if(c > mayor)
-    {
-        mayor = c;
-    }
-
-    if(b < menor)
-    {
-        menor = b;
-    }
-
-    if(c < menor)
-    {
-        menor = b;
-    }
-
-    printf("Mayor: %d\n", mayor);
-    printf("Menor: %d\n", menor);
+    *precio = *precio - (*precio * porcentaje / 100);
 }
 
 
 ///Ejercicio 3
-int sumarN(int n)
+void calcularPromedio(Pila p, float* promedio)
 {
     int suma = 0;
-    for(int i = 0; i <= n; i++)
+    int cantidad = 0;
+
+    while(!pilavacia(&p))
     {
-        suma+= i;
+        suma+= tope(&p);
+        desapilar(&p);
+        cantidad++;
     }
-    return suma;
+
+    *promedio = (float)suma / cantidad;
 }
 
 
 ///Ejercicio 4
-void mostrarTabla(int N)
+float cargarVenta(int* cantidad, float* precio)
 {
-    for(int i = 1; i <= 10; i++)
-    {
-        printf("%d x %d = %d\n", N, i, N * i);
-    }
+    float total;
+
+    printf("Ingrese la cantidad vendida: ");
+    scanf("%d", cantidad);
+
+    printf("Imgrese el precio unitario: ");
+    scanf("%f", precio);
+
+    calcularTotal(*precio, *cantidad, &total);
+
+    return total;
 }
+
 
 ///Ejercicio 5
-float suma(float a, float b)
+void intercambiarValores(int* a, int* b, int* c, int* d, int* e)
 {
-    return a + b;
-}
+    int aux;
 
+    aux = *a;
 
-float resta(float a, float b)
-{
-    return a - b;
-}
-
-float multiplicacion(float a, float b)
-{
-    return a * b;
-}
-
-float division(float a, float b)
-{
-    if(b != 0)
-    {
-        return a / b;
-    }
-        printf("Error: No se puede dividir por 0\n");
-        return 0;
-}
-
-
-///Ejercicio 6
-void cambiarANegativo(int* num)
-{
-    *num = -(*num);
-}
-
-
-///Ejercicio 7
-void cargarPorReferencia(int* a, int* b)
-{
-    printf("Ingrese el primer número: ");
-    scanf("%d", a);
-
-    printf("Ingrese el segundo número: ");
-    scanf("%d", b);
+    *a = *b;
+    *b = *c;
+    *c = *d;
+    *d = *e;
+    *e = aux;
 }
