@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1781662561 source:c:\users\bravi\onedrive\desktop\tp 2\main.c
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	"pila.h"
+
+1741790966 c:\users\bravi\onedrive\desktop\tp 2\pila.h
+	<stdio.h>
+	<malloc.h>
+
+1741790966 source:c:\users\bravi\onedrive\desktop\tp 2\pila.c
+	"pila.h"
+
